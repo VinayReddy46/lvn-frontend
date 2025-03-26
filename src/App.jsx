@@ -39,6 +39,9 @@ import ManageOpportunities from "./pages/admin/ManageOpportunities";
 import ManageOrganizations from "./pages/admin/ManageOrganizations";
 import ManageUsers from "./pages/admin/ManageUsers";
 
+// Import the ComingSoon component
+import ComingSoon from "./pages/ComingSoon";
+
 const queryClient = new QueryClient();
 
 // Wrap each page component with the PageLayout
@@ -64,6 +67,7 @@ const WrappedSystemAdminDashboard = withPageLayout(SystemAdminDashboard);
 const WrappedManageOpportunities = withPageLayout(ManageOpportunities);
 const WrappedManageOrganizations = withPageLayout(ManageOrganizations);
 const WrappedManageUsers = withPageLayout(ManageUsers);
+const WrappedComingSoon = withPageLayout(ComingSoon);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -103,15 +107,18 @@ const App = () => (
                   />
 
                   {/* Simple placeholder routes */}
-                  <Route path="/activity" element={<WrappedDashboard />} />
-                  <Route path="/notifications" element={<WrappedDashboard />} />
-                  <Route path="/nonprofits" element={<WrappedDashboard />} />
-                  <Route path="/causes" element={<WrappedDashboard />} />
-                  <Route path="/calendar" element={<WrappedDashboard />} />
-                  <Route path="/messages" element={<WrappedDashboard />} />
-                  <Route path="/people" element={<WrappedDashboard />} />
-                  <Route path="/reports" element={<WrappedDashboard />} />
-                  <Route path="/settings" element={<WrappedDashboard />} />
+                  <Route path="/activity" element={<WrappedComingSoon />} />
+                  <Route
+                    path="/notifications"
+                    element={<WrappedComingSoon />}
+                  />
+                  <Route path="/nonprofits" element={<WrappedComingSoon />} />
+                  <Route path="/causes" element={<WrappedComingSoon />} />
+                  <Route path="/calendar" element={<WrappedComingSoon />} />
+                  <Route path="/messages" element={<WrappedComingSoon />} />
+                  <Route path="/people" element={<WrappedComingSoon />} />
+                  <Route path="/reports" element={<WrappedComingSoon />} />
+                  <Route path="/settings" element={<WrappedComingSoon />} />
                 </Route>
 
                 {/* Organization Admin Routes */}
@@ -119,32 +126,35 @@ const App = () => (
                   <Route path="/admin" element={<WrappedOrgAdminDashboard />} />
                   <Route
                     path="/admin/org/opportunities"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                   <Route
                     path="/admin/org/volunteers"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                   <Route
                     path="/admin/org/organization"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                   <Route
                     path="/admin/notifications"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                   <Route
                     path="/admin/calendar"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                   <Route
                     path="/admin/messages"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
-                  <Route path="/admin/reports" element={<WrappedDashboard />} />
+                  <Route
+                    path="/admin/reports"
+                    element={<WrappedComingSoon />}
+                  />
                   <Route
                     path="/admin/settings"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                 </Route>
 
@@ -168,19 +178,19 @@ const App = () => (
                   />
                   <Route
                     path="/admin/system/settings"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                   <Route
                     path="/admin/system/access"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                   <Route
                     path="/admin/system/reports"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                   <Route
                     path="/admin/system/notifications"
-                    element={<WrappedDashboard />}
+                    element={<WrappedComingSoon />}
                   />
                 </Route>
               </Route>
