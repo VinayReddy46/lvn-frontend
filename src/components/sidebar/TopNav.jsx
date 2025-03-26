@@ -85,17 +85,8 @@ HeaderLinks.propTypes = {
 const TopNav = ({ title, breadcrumbs }) => {
   const { theme, setTheme } = useTheme();
 
-  // Convert breadcrumbs to links format for HeaderLinks
-  const navLinks = breadcrumbs
-    ? breadcrumbs.map((item, index) => ({
-        label: item.label,
-        path: item.path,
-        isActive: index === breadcrumbs.length - 1,
-      }))
-    : [];
-
   return (
-    <header className="flex items-center justify-between p-4 border-b bg-background">
+    <header className="flex items-center justify-between w-full p-4 border-b bg-background">
       <div className="flex items-center gap-3 sm:gap-4">
         <SidebarTrigger variant="outline" />
         <Separator orientation="vertical" className="h-6" />

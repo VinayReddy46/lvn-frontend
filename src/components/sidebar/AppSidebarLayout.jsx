@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -16,7 +15,7 @@ const Main = ({ children, fixed = true }) => {
   return (
     <main
       className={cn(
-        "px-4 py-6",
+        "w-full px-4 py-6 flex-1",
         fixed && "flex flex-col flex-grow overflow-hidden"
       )}
     >
@@ -46,12 +45,14 @@ export function AppSidebarLayout({ children }) {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen bg-background">
+      <div className="flex min-h-screen w-full bg-background">
         <AppSidebar data={currentSidebarData} />
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col w-full overflow-hidden">
           <TopNav title={pageTitle} breadcrumbs={breadcrumbs} />
           <Main fixed>
-            <div className="h-full overflow-y-auto">{children}</div>
+            <div className="h-full w-full overflow-y-auto max-w-full">
+              {children}
+            </div>
           </Main>
         </div>
       </div>

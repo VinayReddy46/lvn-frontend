@@ -300,7 +300,8 @@ export function AppSidebar({ ...props }) {
           </Link>
         </div>
 
-        <TeamSwitcher teams={currentData.teams || []} />
+        {/*  */}
+         <NavUser user={user} />
 
         {isOrgAdmin && (
           <Button
@@ -321,7 +322,7 @@ export function AppSidebar({ ...props }) {
       </SidebarContent>
 
       <SidebarFooter className="p-4 border-t">
-        <NavUser user={user} />
+       <TeamSwitcher teams={currentData.teams || []} />
         <div className="text-xs text-muted-foreground mt-4 group-data-[collapsible=icon]:hidden">
           <p>Version 1.0.0</p>
           <p className="mt-1">© 2023 LVN. All rights reserved.</p>
