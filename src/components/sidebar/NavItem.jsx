@@ -2,7 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import {
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 
 /**
@@ -16,32 +20,48 @@ export const NavItem = ({
   isPrimary,
   badge,
   onClick,
-}) => (
-  <SidebarMenuItem>
-    <SidebarMenuButton asChild isActive={isActive} tooltip={label}>
-      <Link
-        to={to}
-        className={cn(
-          "relative",
-          isPrimary && "bg-accent text-primary",
-          isPrimary && isActive && "bg-accent/80"
-        )}
-        onClick={onClick}
-      >
-        {Icon && <Icon size={20} />}
-        <span>{label}</span>
-        {badge && (
-          <Badge
-            variant="secondary"
-            className="absolute right-2 bg-accent text-primary hover:bg-accent/80"
-          >
-            {badge}
-          </Badge>
-        )}
-      </Link>
-    </SidebarMenuButton>
-  </SidebarMenuItem>
-);
+}) => {
+  const { setOpenMobile } = useSidebar();
+
+  const handleClick = (e) => {
+    // Close sidebar on mobile when item is clicked
+    setOpenMobile?.(false);
+
+    // Call the onClick prop if provided
+    if (onClick) onClick(e);
+  };
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild isActive={isActive} tooltip={label}>
+        <Link
+          to={to}
+          className={cn(
+            "relative flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md",
+            isActive && "bg-accent text-accent-foreground font-medium",
+            isPrimary && "text-primary",
+            isPrimary && isActive && "bg-primary/10"
+          )}
+          onClick={handleClick}
+        >
+          {Icon && <Icon size={18} />}
+          <span className="truncate">{label}</span>
+          {badge && (
+            <Badge
+              variant="secondary"
+              className={cn(
+                "ml-auto text-xs rounded-full px-1.5 py-0.5",
+                isPrimary && "bg-primary/20 text-primary"
+              )}
+            >
+              {badge}
+            </Badge>
+          )}
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+};
 
 NavItem.propTypes = {
   to: PropTypes.string.isRequired,
