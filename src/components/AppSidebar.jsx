@@ -1,6 +1,6 @@
 import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home,
   Bell,
@@ -14,6 +14,10 @@ import {
   ChevronUp,
   Plus,
   Settings,
+  Users,
+  Calendar,
+  Hand,
+  Mail,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/AuthProvider";
@@ -41,19 +45,38 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
-const NavItem = ({ to, icon: Icon, label, isActive, isPrimary }) => (
+const NavItem = ({
+  to,
+  icon: Icon,
+  label,
+  isActive,
+  isPrimary,
+  badge,
+  onClick,
+}) => (
   <SidebarMenuItem>
     <SidebarMenuButton asChild isActive={isActive}>
       <Link
         to={to}
         className={cn(
-          isPrimary && "bg-orange-50 text-orange-500",
-          isPrimary && isActive && "bg-orange-100"
+          "relative",
+          isPrimary && "bg-accent text-primary",
+          isPrimary && isActive && "bg-accent/80"
         )}
+        onClick={onClick}
       >
         <Icon size={20} />
         <span>{label}</span>
+        {badge && (
+          <Badge
+            variant="secondary"
+            className="absolute right-2 bg-accent text-primary hover:bg-accent/80"
+          >
+            {badge}
+          </Badge>
+        )}
       </Link>
     </SidebarMenuButton>
   </SidebarMenuItem>
@@ -65,9 +88,11 @@ NavItem.propTypes = {
   label: PropTypes.string.isRequired,
   isActive: PropTypes.bool,
   isPrimary: PropTypes.bool,
+  badge: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onClick: PropTypes.func,
 };
 
-export function AppSidebarContent() {
+export function AppSidebar() {
   const { user, isAuthenticated, isOrgAdmin, isSystemAdmin, logout } =
     useAuth();
   const location = useLocation();
@@ -98,10 +123,10 @@ export function AppSidebarContent() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="p-4">
+      <SidebarHeader className="p-4 border-b">
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-orange-500 font-bold text-2xl">
-            POINT
+          <Link to="/" className="text-primary font-bold text-2xl">
+            LVN
           </Link>
           <SidebarTrigger />
         </div>
@@ -111,7 +136,7 @@ export function AppSidebarContent() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="w-full justify-between pl-2 pr-3 py-2 h-auto"
+                className="w-full justify-between pl-2 pr-3 py-2 h-auto hover:bg-accent"
               >
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10 border border-gray-200">
@@ -179,7 +204,7 @@ export function AppSidebarContent() {
         {isOrgAdmin && (
           <Button
             variant="outline"
-            className="w-full mt-4 gap-2 text-orange-500 border-orange-500 hover:bg-orange-50"
+            className="w-full mt-4 gap-2 text-primary border-primary hover:bg-accent"
           >
             <Plus size={16} />
             Add Hours
@@ -191,10 +216,12 @@ export function AppSidebarContent() {
         {isOrgAdmin && (
           <SidebarGroup>
             <div
-              className="flex items-center justify-between px-2 py-1 cursor-pointer"
+              className="flex items-center justify-between px-3 py-2 cursor-pointer rounded-md hover:bg-accent"
               onClick={() => toggleGroup("organizations")}
             >
-              <SidebarGroupLabel>My Organizations</SidebarGroupLabel>
+              <SidebarGroupLabel className="font-medium">
+                My Organizations
+              </SidebarGroupLabel>
               {expandedGroups.organizations ? (
                 <ChevronUp size={16} />
               ) : (
@@ -203,9 +230,21 @@ export function AppSidebarContent() {
             </div>
             {expandedGroups.organizations && (
               <SidebarGroupContent>
-                <div className="flex items-center gap-2 p-2 cursor-pointer hover:bg-slate-100 rounded-md">
-                  <div className="bg-slate-200 rounded-full p-1">
-                    <Plus size={16} />
+                <div className="flex items-center gap-2 p-2 cursor-pointer hover:bg-accent rounded-md ml-2">
+                  <div className="bg-accent rounded-full p-1">
+                    <Building2 size={14} />
+                  </div>
+                  <span className="text-sm">Community Helpers</span>
+                </div>
+                <div className="flex items-center gap-2 p-2 cursor-pointer hover:bg-accent rounded-md ml-2">
+                  <div className="bg-accent rounded-full p-1">
+                    <Building2 size={14} />
+                  </div>
+                  <span className="text-sm">City Food Bank</span>
+                </div>
+                <div className="flex items-center gap-2 p-2 cursor-pointer hover:bg-accent rounded-md ml-2">
+                  <div className="bg-primary/10 rounded-full p-1">
+                    <Plus size={14} className="text-primary" />
                   </div>
                   <span className="text-sm">Add Organization</span>
                 </div>
@@ -228,19 +267,14 @@ export function AppSidebarContent() {
                 icon={Bell}
                 label="Notifications"
                 isActive={location.pathname === "/notifications"}
+                badge="3"
               />
               <NavItem
-                to="/volunteer"
+                to="/my-opportunities"
                 icon={Briefcase}
-                label="Volunteer"
-                isActive={location.pathname === "/volunteer"}
+                label="My Opportunities"
+                isActive={location.pathname === "/my-opportunities"}
                 isPrimary={true}
-              />
-              <NavItem
-                to="/my-registrations"
-                icon={Activity}
-                label="My Registrations"
-                isActive={location.pathname === "/my-registrations"}
               />
               <NavItem
                 to="/activity"
@@ -249,25 +283,84 @@ export function AppSidebarContent() {
                 isActive={location.pathname === "/activity"}
               />
               <NavItem
+                to="/organizations"
+                icon={Building2}
+                label="Organizations"
+                isActive={location.pathname === "/organizations"}
+              />
+              <NavItem
+                to="/opportunities"
+                icon={Calendar}
+                label="Opportunities"
+                isActive={location.pathname === "/opportunities"}
+              />
+              {isSystemAdmin && (
+                <>
+                  <NavItem
+                    to="/admin/system/opportunities"
+                    icon={Calendar}
+                    label="Manage Opportunities"
+                    isActive={
+                      location.pathname === "/admin/system/opportunities"
+                    }
+                  />
+                  <NavItem
+                    to="/admin/system/organizations"
+                    icon={Building2}
+                    label="Manage Organizations"
+                    isActive={
+                      location.pathname === "/admin/system/organizations"
+                    }
+                  />
+                  <NavItem
+                    to="/admin/system/users"
+                    icon={Users}
+                    label="Manage Users"
+                    isActive={location.pathname === "/admin/system/users"}
+                  />
+                </>
+              )}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <div className="py-2 px-3">
+            <SidebarGroupLabel className="font-medium text-muted-foreground">
+              Explore
+            </SidebarGroupLabel>
+          </div>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <NavItem
+                to="/causes"
+                icon={Hand}
+                label="Browse Causes"
+                isActive={location.pathname === "/causes"}
+              />
+              <NavItem
                 to="/nonprofits"
                 icon={Building2}
-                label="Nonprofits"
+                label="Discover Nonprofits"
                 isActive={location.pathname === "/nonprofits"}
               />
               <NavItem
-                to="/causes"
-                icon={PieChart}
-                label="Causes"
-                isActive={location.pathname === "/causes"}
+                to="/contact"
+                icon={Mail}
+                label="Contact Support"
+                isActive={location.pathname === "/contact"}
               />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="py-4 px-6">
-        <div className="text-xs text-muted-foreground text-center">
-          © {new Date().getFullYear()} VolunteerNetwork
+      <SidebarFooter className="p-4 border-t">
+        <div className="space-y-2">
+          <div className="text-xs text-muted-foreground">
+            <p>Version 1.0.0</p>
+            <p className="mt-1">© 2023 LVN. All rights reserved.</p>
+          </div>
         </div>
       </SidebarFooter>
     </Sidebar>
@@ -277,9 +370,9 @@ export function AppSidebarContent() {
 export function AppSidebarLayout({ children }) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
-        <AppSidebarContent />
-        <main className="flex-1 overflow-auto">{children}</main>
+      <div className="grid lg:grid-cols-[280px_1fr] h-screen">
+        <AppSidebar />
+        <main className="overflow-auto">{children}</main>
       </div>
     </SidebarProvider>
   );

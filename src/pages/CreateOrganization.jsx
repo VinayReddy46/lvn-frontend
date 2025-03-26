@@ -5,7 +5,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categories } from "@/utils/fakeData.js";
-import { NavSidebarLayout } from "@/components/NavSidebar";
+import { AppSidebarLayout } from "@/components/AppSidebar";
 import {
   Card,
   CardContent,
@@ -489,7 +489,7 @@ const CreateOrganization = () => {
   };
 
   return (
-    <NavSidebarLayout>
+    <AppSidebarLayout>
       <div className="container py-10 max-w-4xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Create Organization</h1>
@@ -581,7 +581,7 @@ const CreateOrganization = () => {
           </CardFooter>
         </Card>
       </div>
-    </NavSidebarLayout>
+    </AppSidebarLayout>
   );
 };
 

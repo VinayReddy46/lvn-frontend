@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavSidebarLayout } from "@/components/NavSidebar";
+import { AppSidebarLayout } from "@/components/AppSidebar";
 import { useAuth } from "@/providers/AuthProvider";
 import {
   Card,
@@ -93,7 +93,7 @@ const Dashboard = () => {
   };
 
   return (
-    <NavSidebarLayout>
+    <AppSidebarLayout>
       <div className="p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <h1 className="text-3xl font-bold">
@@ -335,7 +335,7 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
-    </NavSidebarLayout>
+    </AppSidebarLayout>
   );
 };
 
