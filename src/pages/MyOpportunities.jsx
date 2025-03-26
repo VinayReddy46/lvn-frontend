@@ -1,6 +1,4 @@
-import React from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -124,200 +122,188 @@ const MyOpportunities = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-grow pt-32 pb-24 px-6 md:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-2">My Opportunities</h1>
-            <p className="text-lg text-muted-foreground">
-              Track and manage your volunteer applications and activities
-            </p>
-          </div>
+    <div className="container py-8 max-w-7xl">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-2">My Opportunities</h1>
+        <p className="text-lg text-muted-foreground">
+          Track and manage your volunteer applications and activities
+        </p>
+      </div>
 
-          <Tabs defaultValue="applied" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2 md:w-[400px]">
-              <TabsTrigger value="applied">Applied Opportunities</TabsTrigger>
-              <TabsTrigger value="completed">
-                Completed Opportunities
-              </TabsTrigger>
-            </TabsList>
+      <Tabs defaultValue="applied" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2 md:w-[400px]">
+          <TabsTrigger value="applied">Applied Opportunities</TabsTrigger>
+          <TabsTrigger value="completed">Completed Opportunities</TabsTrigger>
+        </TabsList>
 
-            <TabsContent value="applied" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Applied Opportunities</CardTitle>
-                  <CardDescription>
-                    Track the status of your volunteer applications
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Opportunity</TableHead>
-                        <TableHead>Date & Time</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {appliedOpportunities.map((opportunity) => (
-                        <TableRow key={opportunity.id}>
-                          <TableCell>
-                            <div className="font-medium">
-                              {opportunity.title}
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {opportunity.organization}
-                            </div>
-                            <div className="text-sm text-muted-foreground flex items-center mt-1">
-                              <MapPin className="h-3.5 w-3.5 mr-1" />
-                              {opportunity.location}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center">
-                              <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
-                              {new Date(opportunity.date).toLocaleDateString()}
-                            </div>
-                            <div className="flex items-center text-sm text-muted-foreground mt-1">
-                              <Clock className="h-3.5 w-3.5 mr-1" />
-                              {opportunity.time}
-                            </div>
-                            <div className="text-xs text-muted-foreground mt-1">
-                              Applied on:{" "}
-                              {new Date(
-                                opportunity.applicationDate
-                              ).toLocaleDateString()}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(
-                                opportunity.status
-                              )}`}
-                            >
-                              {opportunity.status}
-                            </span>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                  <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem>
-                                  <Eye className="h-4 w-4 mr-2" />
-                                  View Details
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <FileText className="h-4 w-4 mr-2" />
-                                  View Application
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            </TabsContent>
+        <TabsContent value="applied" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Applied Opportunities</CardTitle>
+              <CardDescription>
+                Track the status of your volunteer applications
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Opportunity</TableHead>
+                    <TableHead>Date & Time</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {appliedOpportunities.map((opportunity) => (
+                    <TableRow key={opportunity.id}>
+                      <TableCell>
+                        <div className="font-medium">{opportunity.title}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {opportunity.organization}
+                        </div>
+                        <div className="text-sm text-muted-foreground flex items-center mt-1">
+                          <MapPin className="h-3.5 w-3.5 mr-1" />
+                          {opportunity.location}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
+                          {new Date(opportunity.date).toLocaleDateString()}
+                        </div>
+                        <div className="flex items-center text-sm text-muted-foreground mt-1">
+                          <Clock className="h-3.5 w-3.5 mr-1" />
+                          {opportunity.time}
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Applied on:{" "}
+                          {new Date(
+                            opportunity.applicationDate
+                          ).toLocaleDateString()}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(
+                            opportunity.status
+                          )}`}
+                        >
+                          {opportunity.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <FileText className="h-4 w-4 mr-2" />
+                              View Application
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-            <TabsContent value="completed" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Completed Opportunities</CardTitle>
-                  <CardDescription>
-                    View your volunteer history and logged hours
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Opportunity</TableHead>
-                        <TableHead>Date & Hours</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {completedOpportunities.map((opportunity) => (
-                        <TableRow key={opportunity.id}>
-                          <TableCell>
-                            <div className="font-medium">
-                              {opportunity.title}
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {opportunity.organization}
-                            </div>
-                            <div className="text-sm text-muted-foreground flex items-center mt-1">
-                              <MapPin className="h-3.5 w-3.5 mr-1" />
-                              {opportunity.location}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center">
-                              <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
-                              {new Date(opportunity.date).toLocaleDateString()}
-                            </div>
-                            <div className="flex items-center text-sm text-muted-foreground mt-1">
-                              <Clock className="h-3.5 w-3.5 mr-1" />
-                              {opportunity.time}
-                            </div>
-                            <div className="text-sm font-medium mt-1">
-                              Hours logged: {opportunity.hoursLogged}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(
-                                opportunity.status
-                              )}`}
-                            >
-                              {opportunity.status}
-                            </span>
-                            {opportunity.feedback && (
-                              <div className="text-xs text-muted-foreground mt-2 max-w-[200px] truncate">
-                                Feedback: {opportunity.feedback}
-                              </div>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                  <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem>
-                                  <Eye className="h-4 w-4 mr-2" />
-                                  View Details
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <FileText className="h-4 w-4 mr-2" />
-                                  Download Certificate
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </main>
-      <Footer />
+        <TabsContent value="completed" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Completed Opportunities</CardTitle>
+              <CardDescription>
+                View your volunteer history and logged hours
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Opportunity</TableHead>
+                    <TableHead>Date & Hours</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {completedOpportunities.map((opportunity) => (
+                    <TableRow key={opportunity.id}>
+                      <TableCell>
+                        <div className="font-medium">{opportunity.title}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {opportunity.organization}
+                        </div>
+                        <div className="text-sm text-muted-foreground flex items-center mt-1">
+                          <MapPin className="h-3.5 w-3.5 mr-1" />
+                          {opportunity.location}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
+                          {new Date(opportunity.date).toLocaleDateString()}
+                        </div>
+                        <div className="flex items-center text-sm text-muted-foreground mt-1">
+                          <Clock className="h-3.5 w-3.5 mr-1" />
+                          {opportunity.time}
+                        </div>
+                        <div className="text-sm font-medium mt-1">
+                          Hours logged: {opportunity.hoursLogged}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(
+                            opportunity.status
+                          )}`}
+                        >
+                          {opportunity.status}
+                        </span>
+                        {opportunity.feedback && (
+                          <div className="text-xs text-muted-foreground mt-2 max-w-[200px] truncate">
+                            Feedback: {opportunity.feedback}
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <FileText className="h-4 w-4 mr-2" />
+                              Download Certificate
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

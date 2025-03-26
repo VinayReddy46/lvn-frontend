@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,9 +86,8 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-grow pt-32 pb-24 px-6 md:px-8">
+    <>
+      <div className="container py-8 max-w-5xl">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2">Your Profile</h1>
@@ -275,9 +272,8 @@ const Profile = () => {
             </div>
           </form>
         </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

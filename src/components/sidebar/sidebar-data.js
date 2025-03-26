@@ -1,16 +1,17 @@
 // @ts-nocheck
 import {
-  Home,
+  LayoutDashboard,
   Bell,
   Activity,
   Building2,
-  PieChart,
   Calendar,
-  Hand,
   Mail,
-  Users,
+  User,
+  FileText,
   Settings,
-  Briefcase,
+  Users,
+  PieChart,
+  Shield,
 } from "lucide-react";
 
 /**
@@ -50,11 +51,6 @@ export const sidebarData = {
       logo: Building2,
       plan: "Non-profit",
     },
-    {
-      name: "City Food Bank",
-      logo: Building2,
-      plan: "Charity",
-    },
   ],
   navGroups: [
     {
@@ -63,7 +59,7 @@ export const sidebarData = {
         {
           title: "Dashboard",
           url: "/dashboard",
-          icon: Home,
+          icon: LayoutDashboard,
         },
         {
           title: "Notifications",
@@ -73,14 +69,19 @@ export const sidebarData = {
         },
         {
           title: "My Activities",
-          url: "/activities",
+          url: "/activity",
           icon: Activity,
         },
         {
           title: "Opportunities",
-          url: "/opportunities",
-          icon: Hand,
+          url: "/my-opportunities",
+          icon: FileText,
           isPrimary: true,
+        },
+        {
+          title: "Profile",
+          url: "/profile",
+          icon: User,
         },
       ],
     },
@@ -93,15 +94,11 @@ export const sidebarData = {
           items: [
             {
               title: "Community Helpers",
-              url: "/organizations/community-helpers",
-            },
-            {
-              title: "City Food Bank",
-              url: "/organizations/city-food-bank",
+              url: "/nonprofits/community-helpers",
             },
             {
               title: "Add Organization",
-              url: "/organizations/add",
+              url: "/create-organization",
             },
           ],
         },
@@ -119,11 +116,6 @@ export const sidebarData = {
           title: "Messages",
           url: "/messages",
           icon: Mail,
-        },
-        {
-          title: "Organizations",
-          url: "/organizations",
-          icon: Building2,
         },
         {
           title: "People",
@@ -147,19 +139,27 @@ export const sidebarData = {
 
 // Admin sidebar data
 export const adminSidebarData = {
+  teams: [
+    {
+      name: "System Admin",
+      logo: Shield,
+      plan: "admin@example.com",
+    },
+  ],
   navGroups: [
     {
       title: "Admin",
       items: [
         {
           title: "Dashboard",
-          url: "/admin",
-          icon: Home,
+          url: "/admin/system",
+          icon: LayoutDashboard,
         },
         {
           title: "Manage Opportunities",
           url: "/admin/system/opportunities",
-          icon: Calendar,
+          icon: FileText,
+          isPrimary: true,
         },
         {
           title: "Manage Organizations",
@@ -170,6 +170,11 @@ export const adminSidebarData = {
           title: "Manage Users",
           url: "/admin/system/users",
           icon: Users,
+        },
+        {
+          title: "System Settings",
+          url: "/admin/system/settings",
+          icon: Settings,
         },
       ],
     },

@@ -5,7 +5,6 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categories } from "@/utils/fakeData.js";
-import { AppSidebarLayout } from "@/components/AppSidebar";
 import {
   Card,
   CardContent,
@@ -489,99 +488,92 @@ const CreateOrganization = () => {
   };
 
   return (
-    <AppSidebarLayout>
-      <div className="container py-10 max-w-4xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">Create Organization</h1>
-          <p className="text-muted-foreground mt-1">
-            Set up your organization to start posting volunteer opportunities
-          </p>
-        </div>
+    <div className="container py-10 max-w-4xl">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Create Organization</h1>
+        <p className="text-muted-foreground mt-1">
+          Set up your organization to start posting volunteer opportunities
+        </p>
+      </div>
 
-        <div className="flex items-center justify-between mb-8">
-          {steps.map((step, index) => (
-            <div key={step.id} className="flex flex-col items-center">
-              <div
-                className={`
-                flex items-center justify-center w-10 h-10 rounded-full border-2
-                ${
-                  index < currentStep
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : index === currentStep
-                    ? "bg-primary/10 text-primary border-primary"
-                    : "bg-muted text-muted-foreground border-muted-foreground/30"
-                }
-              `}
-              >
-                {index < currentStep ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <span>{index + 1}</span>
-                )}
-              </div>
-              <span
-                className={`text-sm mt-2 ${
-                  index === currentStep
-                    ? "font-medium"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {step.title}
-              </span>
-              {index < steps.length - 1 && (
-                <div className="hidden sm:block w-12 h-[2px] bg-muted-foreground/30 mx-2" />
+      <div className="flex items-center justify-between mb-8">
+        {steps.map((step, index) => (
+          <div key={step.id} className="flex flex-col items-center">
+            <div
+              className={`
+              flex items-center justify-center w-10 h-10 rounded-full border-2
+              ${
+                index < currentStep
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : index === currentStep
+                  ? "bg-primary/10 text-primary border-primary"
+                  : "bg-muted text-muted-foreground border-muted-foreground/30"
+              }
+            `}
+            >
+              {index < currentStep ? (
+                <CheckCircle2 className="h-5 w-5" />
+              ) : (
+                <span>{index + 1}</span>
               )}
             </div>
-          ))}
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>{steps[currentStep].title}</CardTitle>
-            <CardDescription>
-              {currentStep === 0 &&
-                "Provide basic information about your organization"}
-              {currentStep === 1 && "Where is your organization located?"}
-              {currentStep === 2 &&
-                "Select categories that represent your organization's focus areas"}
-              {currentStep === 3 &&
-                "Review your organization details before submission"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                {renderCurrentStep()}
-              </form>
-            </Form>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleBack}
-              disabled={currentStep === 0}
+            <span
+              className={`text-sm mt-2 ${
+                index === currentStep ? "font-medium" : "text-muted-foreground"
+              }`}
             >
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back
-            </Button>
-            <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
-              {currentStep < steps.length - 1 ? (
-                <>
-                  Next <ArrowRight className="ml-2 h-4 w-4" />
-                </>
-              ) : (
-                <>
-                  <Building2 className="mr-2 h-4 w-4" /> Create Organization
-                </>
-              )}
-            </Button>
-          </CardFooter>
-        </Card>
+              {step.title}
+            </span>
+            {index < steps.length - 1 && (
+              <div className="hidden sm:block w-12 h-[2px] bg-muted-foreground/30 mx-2" />
+            )}
+          </div>
+        ))}
       </div>
-    </AppSidebarLayout>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{steps[currentStep].title}</CardTitle>
+          <CardDescription>
+            {currentStep === 0 &&
+              "Provide basic information about your organization"}
+            {currentStep === 1 && "Where is your organization located?"}
+            {currentStep === 2 &&
+              "Select categories that represent your organization's focus areas"}
+            {currentStep === 3 &&
+              "Review your organization details before submission"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {renderCurrentStep()}
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleBack}
+            disabled={currentStep === 0}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back
+          </Button>
+          <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
+            {currentStep < steps.length - 1 ? (
+              <>
+                Next <ArrowRight className="ml-2 h-4 w-4" />
+              </>
+            ) : (
+              <>
+                <Building2 className="mr-2 h-4 w-4" /> Create Organization
+              </>
+            )}
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 

@@ -27,7 +27,7 @@ import {
   DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
 import SidebarNav from "./SidebarNav";
-import { sidebarData } from "./sidebar-data";
+import { sidebarData, adminSidebarData } from "./sidebar-data";
 import { cn } from "@/lib/utils";
 
 /**
@@ -269,16 +269,29 @@ NavUser.propTypes = {
  * AppSidebar component for the application sidebar
  */
 export function AppSidebar({ ...props }) {
-  const { user, isOrgAdmin } = useAuth();
+  const { user, isOrgAdmin, isSystemAdmin } = useAuth();
   const { open } = useSidebar();
   const isCollapsed = !open;
-  console.log("isCollapsed", isCollapsed);
 
   // If user is not logged in, don't render anything
   if (!user) return null;
 
-  // Determine which sidebar data to use based on admin status
-  const currentData = props.data || sidebarData;
+  // Determine which sidebar data to use based on user role
+  let currentData;
+  if (props.data) {
+    // If data is explicitly passed, use it (for specific layout components)
+    currentData = props.data;
+  } else if (isSystemAdmin) {
+    // For system admins
+    currentData = adminSidebarData;
+  } else if (isOrgAdmin) {
+    // For organization admins - fallback to regular sidebar data for now
+    // This could be replaced with a specific org admin sidebar data
+    currentData = sidebarData;
+  } else {
+    // For regular users
+    currentData = sidebarData;
+  }
 
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
@@ -300,8 +313,7 @@ export function AppSidebar({ ...props }) {
           </Link>
         </div>
 
-        {/*  */}
-         <NavUser user={user} />
+        <NavUser user={user} />
 
         {isOrgAdmin && (
           <Button
@@ -322,7 +334,7 @@ export function AppSidebar({ ...props }) {
       </SidebarContent>
 
       <SidebarFooter className="border-t">
-       <TeamSwitcher teams={currentData.teams || []} />
+        <TeamSwitcher teams={currentData.teams || []} />
         <div className="text-xs text-muted-foreground mt-4 group-data-[collapsible=icon]:hidden">
           <p>Version 1.0.0</p>
           <p className="mt-1">© 2023 LVN. All rights reserved.</p>

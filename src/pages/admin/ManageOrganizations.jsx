@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import {
   Table,
   TableBody,
@@ -198,241 +196,236 @@ const ManageOrganizations = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-grow pt-32 pb-24 px-6 md:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-            <div>
-              <h1 className="text-4xl font-bold mb-2">Manage Organizations</h1>
-              <p className="text-lg text-muted-foreground">
-                Verify, edit, and manage partner organizations
-              </p>
-            </div>
-            <Button className="gap-2">
-              <PlusCircle className="h-4 w-4" />
-              Add New Organization
-            </Button>
+    <div className="container py-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Manage Organizations</h1>
+            <p className="text-lg text-muted-foreground">
+              Verify, edit, and manage partner organizations
+            </p>
           </div>
+          <Button className="gap-2">
+            <PlusCircle className="h-4 w-4" />
+            Add New Organization
+          </Button>
+        </div>
 
-          <Card className="mb-8">
-            <CardContent className="pt-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-grow">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="search"
-                    placeholder="Search organizations..."
-                    className="pl-10 w-full"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <Button variant="outline" className="gap-2 shrink-0">
-                  <Filter className="h-4 w-4" />
-                  Filter
-                </Button>
+        <Card className="mb-8">
+          <CardContent className="pt-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-grow">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search organizations..."
+                  className="pl-10 w-full"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-            </CardContent>
-          </Card>
+              <Button variant="outline" className="gap-2 shrink-0">
+                <Filter className="h-4 w-4" />
+                Filter
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Tabs
-            defaultValue="all"
-            onValueChange={setActiveTab}
-            className="space-y-6"
-          >
-            <TabsList className="grid grid-cols-5 w-full md:w-[800px]">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="verified">Verified</TabsTrigger>
-              <TabsTrigger value="pending">Pending</TabsTrigger>
-              <TabsTrigger value="rejected">Rejected</TabsTrigger>
-              <TabsTrigger value="inactive">Inactive</TabsTrigger>
-            </TabsList>
+        <Tabs
+          defaultValue="all"
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
+          <TabsList className="grid grid-cols-5 w-full md:w-[800px]">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="verified">Verified</TabsTrigger>
+            <TabsTrigger value="pending">Pending</TabsTrigger>
+            <TabsTrigger value="rejected">Rejected</TabsTrigger>
+            <TabsTrigger value="inactive">Inactive</TabsTrigger>
+          </TabsList>
 
-            <TabsContent value={activeTab} className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Partner Organizations</CardTitle>
-                  <CardDescription>
-                    {activeTab === "all" && "All organizations in the system"}
-                    {activeTab === "verified" &&
-                      "Verified partner organizations"}
-                    {activeTab === "pending" &&
-                      "Organizations pending verification"}
-                    {activeTab === "rejected" &&
-                      "Organizations that were rejected"}
-                    {activeTab === "inactive" && "Inactive organizations"}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Organization</TableHead>
-                        <TableHead>Details</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Stats</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredOrganizations.length > 0 ? (
-                        filteredOrganizations.map((org) => (
-                          <TableRow key={org.id}>
-                            <TableCell>
-                              <div className="flex items-center space-x-3">
-                                <div className="bg-background rounded-full p-1 shadow-sm">
-                                  <img
-                                    src={org.logo}
-                                    alt={`${org.name} logo`}
-                                    className="w-10 h-10 rounded-full object-cover"
-                                  />
-                                </div>
-                                <div>
-                                  <div className="font-medium">{org.name}</div>
-                                  <Badge variant="outline" className="mt-1">
-                                    {org.category}
-                                  </Badge>
-                                </div>
+          <TabsContent value={activeTab} className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Partner Organizations</CardTitle>
+                <CardDescription>
+                  {activeTab === "all" && "All organizations in the system"}
+                  {activeTab === "verified" && "Verified partner organizations"}
+                  {activeTab === "pending" &&
+                    "Organizations pending verification"}
+                  {activeTab === "rejected" &&
+                    "Organizations that were rejected"}
+                  {activeTab === "inactive" && "Inactive organizations"}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Organization</TableHead>
+                      <TableHead>Details</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Stats</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredOrganizations.length > 0 ? (
+                      filteredOrganizations.map((org) => (
+                        <TableRow key={org.id}>
+                          <TableCell>
+                            <div className="flex items-center space-x-3">
+                              <div className="bg-background rounded-full p-1 shadow-sm">
+                                <img
+                                  src={org.logo}
+                                  alt={`${org.name} logo`}
+                                  className="w-10 h-10 rounded-full object-cover"
+                                />
                               </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center text-sm">
-                                <MapPin className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
-                                {org.location}
+                              <div>
+                                <div className="font-medium">{org.name}</div>
+                                <Badge variant="outline" className="mt-1">
+                                  {org.category}
+                                </Badge>
                               </div>
-                              <div className="flex items-center text-sm mt-1">
-                                <Globe className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
-                                <a
-                                  href={org.website}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-primary hover:underline truncate max-w-[180px] inline-block"
-                                >
-                                  {org.website.replace(/^https?:\/\//, "")}
-                                </a>
-                              </div>
-                              <div className="text-sm text-muted-foreground mt-1 truncate max-w-[200px]">
-                                Contact: {org.contactPerson}
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <span
-                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(
-                                  org.status
-                                )}`}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center text-sm">
+                              <MapPin className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
+                              {org.location}
+                            </div>
+                            <div className="flex items-center text-sm mt-1">
+                              <Globe className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
+                              <a
+                                href={org.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary hover:underline truncate max-w-[180px] inline-block"
                               >
-                                {org.status}
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center text-sm">
-                                <Users className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
-                                {org.volunteers.toLocaleString()} volunteers
-                              </div>
-                              <div className="text-sm text-muted-foreground mt-1">
-                                {org.opportunities} active opportunities
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="icon">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem>
-                                    <Eye className="h-4 w-4 mr-2" />
-                                    View Details
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    <Edit className="h-4 w-4 mr-2" />
-                                    Edit Organization
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    <ExternalLink className="h-4 w-4 mr-2" />
-                                    View Opportunities
-                                  </DropdownMenuItem>
+                                {org.website.replace(/^https?:\/\//, "")}
+                              </a>
+                            </div>
+                            <div className="text-sm text-muted-foreground mt-1 truncate max-w-[200px]">
+                              Contact: {org.contactPerson}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(
+                                org.status
+                              )}`}
+                            >
+                              {org.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center text-sm">
+                              <Users className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
+                              {org.volunteers.toLocaleString()} volunteers
+                            </div>
+                            <div className="text-sm text-muted-foreground mt-1">
+                              {org.opportunities} active opportunities
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem>
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View Details
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Edit className="h-4 w-4 mr-2" />
+                                  Edit Organization
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <ExternalLink className="h-4 w-4 mr-2" />
+                                  View Opportunities
+                                </DropdownMenuItem>
 
-                                  {org.status === "Pending" && (
-                                    <>
-                                      <DropdownMenuSeparator />
-                                      <DropdownMenuItem
-                                        onClick={() =>
-                                          handleStatusChange(org.id, "Verified")
-                                        }
-                                      >
-                                        <CheckCircle className="h-4 w-4 mr-2" />
-                                        Verify Organization
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem
-                                        onClick={() =>
-                                          handleStatusChange(org.id, "Rejected")
-                                        }
-                                      >
-                                        <XCircle className="h-4 w-4 mr-2" />
-                                        Reject
-                                      </DropdownMenuItem>
-                                    </>
-                                  )}
-
-                                  {org.status === "Verified" && (
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        handleStatusChange(org.id, "Inactive")
-                                      }
-                                    >
-                                      <XCircle className="h-4 w-4 mr-2" />
-                                      Mark as Inactive
-                                    </DropdownMenuItem>
-                                  )}
-
-                                  {(org.status === "Inactive" ||
-                                    org.status === "Rejected") && (
+                                {org.status === "Pending" && (
+                                  <>
+                                    <DropdownMenuSeparator />
                                     <DropdownMenuItem
                                       onClick={() =>
                                         handleStatusChange(org.id, "Verified")
                                       }
                                     >
                                       <CheckCircle className="h-4 w-4 mr-2" />
-                                      Restore as Verified
+                                      Verify Organization
                                     </DropdownMenuItem>
-                                  )}
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleStatusChange(org.id, "Rejected")
+                                      }
+                                    >
+                                      <XCircle className="h-4 w-4 mr-2" />
+                                      Reject
+                                    </DropdownMenuItem>
+                                  </>
+                                )}
 
-                                  <DropdownMenuSeparator />
+                                {org.status === "Verified" && (
                                   <DropdownMenuItem
                                     onClick={() =>
-                                      handleDeleteOrganization(org.id)
+                                      handleStatusChange(org.id, "Inactive")
                                     }
-                                    className="text-destructive"
                                   >
-                                    <Trash2 className="h-4 w-4 mr-2" />
-                                    Delete
+                                    <XCircle className="h-4 w-4 mr-2" />
+                                    Mark as Inactive
                                   </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      ) : (
-                        <TableRow>
-                          <TableCell colSpan={5} className="text-center py-6">
-                            <p className="text-muted-foreground">
-                              No organizations found
-                            </p>
+                                )}
+
+                                {(org.status === "Inactive" ||
+                                  org.status === "Rejected") && (
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      handleStatusChange(org.id, "Verified")
+                                    }
+                                  >
+                                    <CheckCircle className="h-4 w-4 mr-2" />
+                                    Restore as Verified
+                                  </DropdownMenuItem>
+                                )}
+
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleDeleteOrganization(org.id)
+                                  }
+                                  className="text-destructive"
+                                >
+                                  <Trash2 className="h-4 w-4 mr-2" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </TableCell>
                         </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </main>
-      <Footer />
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center py-6">
+                          <p className="text-muted-foreground">
+                            No organizations found
+                          </p>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };

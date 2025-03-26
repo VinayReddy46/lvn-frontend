@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import {
   Table,
   TableBody,
@@ -207,7 +205,6 @@ const ManageUsers = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
       <main className="flex-grow pt-32 pb-24 px-6 md:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
@@ -456,7 +453,6 @@ const ManageUsers = () => {
           </Tabs>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

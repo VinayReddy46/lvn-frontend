@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "@/providers/ThemeProvider";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -82,11 +83,16 @@ HeaderLinks.propTypes = {
 /**
  * TopNav component for page header with breadcrumbs and theme toggle
  */
-const TopNav = ({ title, breadcrumbs }) => {
+const TopNav = ({ title, breadcrumbs, fixed = false }) => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="flex items-center justify-between w-full p-4 border-b bg-background">
+    <header
+      className={cn(
+        "flex items-center justify-between w-full p-4 border-b bg-background",
+        fixed && "sticky top-0 z-10"
+      )}
+    >
       <div className="flex items-center gap-3 sm:gap-4">
         <SidebarTrigger variant="outline" />
         <Separator orientation="vertical" className="h-6" />
@@ -149,6 +155,7 @@ TopNav.propTypes = {
       path: PropTypes.string.isRequired,
     })
   ),
+  fixed: PropTypes.bool,
 };
 
 export default TopNav;

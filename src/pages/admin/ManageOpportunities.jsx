@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import {
   Table,
   TableBody,
@@ -171,213 +169,207 @@ const ManageOpportunities = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-grow pt-32 pb-24 px-6 md:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-            <div>
-              <h1 className="text-4xl font-bold mb-2">Manage Opportunities</h1>
-              <p className="text-lg text-muted-foreground">
-                Create, edit, and manage volunteer opportunities
-              </p>
-            </div>
-            <Button className="gap-2">
-              <PlusCircle className="h-4 w-4" />
-              Add New Opportunity
-            </Button>
+    <div className="container py-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Manage Opportunities</h1>
+            <p className="text-lg text-muted-foreground">
+              Create, edit, and manage volunteer opportunities
+            </p>
           </div>
+          <Button className="gap-2">
+            <PlusCircle className="h-4 w-4" />
+            Add New Opportunity
+          </Button>
+        </div>
 
-          <Card className="mb-8">
-            <CardContent className="pt-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-grow">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="search"
-                    placeholder="Search opportunities..."
-                    className="pl-10 w-full"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <Button variant="outline" className="gap-2 shrink-0">
-                  <Filter className="h-4 w-4" />
-                  Filter
-                </Button>
+        <Card className="mb-8">
+          <CardContent className="pt-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-grow">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search opportunities..."
+                  className="pl-10 w-full"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-            </CardContent>
-          </Card>
+              <Button variant="outline" className="gap-2 shrink-0">
+                <Filter className="h-4 w-4" />
+                Filter
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Tabs
-            defaultValue="all"
-            onValueChange={setActiveTab}
-            className="space-y-6"
-          >
-            <TabsList className="grid grid-cols-4 w-full md:w-[600px]">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="active">Active</TabsTrigger>
-              <TabsTrigger value="pending">Pending Approval</TabsTrigger>
-              <TabsTrigger value="inactive">Inactive</TabsTrigger>
-            </TabsList>
+        <Tabs
+          defaultValue="all"
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
+          <TabsList className="grid grid-cols-4 w-full md:w-[600px]">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="active">Active</TabsTrigger>
+            <TabsTrigger value="pending">Pending Approval</TabsTrigger>
+            <TabsTrigger value="inactive">Inactive</TabsTrigger>
+          </TabsList>
 
-            <TabsContent value={activeTab} className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Volunteer Opportunities</CardTitle>
-                  <CardDescription>
-                    {activeTab === "all" &&
-                      "All volunteer opportunities in the system"}
-                    {activeTab === "active" &&
-                      "Currently active volunteer opportunities"}
-                    {activeTab === "pending" &&
-                      "Opportunities pending admin approval"}
-                    {activeTab === "inactive" &&
-                      "Inactive or past volunteer opportunities"}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Opportunity</TableHead>
-                        <TableHead>Organization</TableHead>
-                        <TableHead>Date & Location</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Spots</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredOpportunities.length > 0 ? (
-                        filteredOpportunities.map((opportunity) => (
-                          <TableRow key={opportunity.id}>
-                            <TableCell className="font-medium">
-                              <div>{opportunity.title}</div>
-                              <Badge variant="outline" className="mt-1">
-                                {opportunity.category}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>{opportunity.organization}</TableCell>
-                            <TableCell>
-                              <div className="flex items-center">
-                                <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
-                                {new Date(
-                                  opportunity.date
-                                ).toLocaleDateString()}
-                              </div>
-                              <div className="flex items-center text-sm text-muted-foreground mt-1">
-                                <MapPin className="h-3.5 w-3.5 mr-1" />
-                                {opportunity.location}
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <span
-                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(
-                                  opportunity.status
-                                )}`}
-                              >
-                                {opportunity.status}
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <div>{opportunity.spotsAvailable} available</div>
-                              <div className="text-sm text-muted-foreground">
-                                {opportunity.applicants} applicants
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="icon">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem>
-                                    <Eye className="h-4 w-4 mr-2" />
-                                    View Details
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    <Edit className="h-4 w-4 mr-2" />
-                                    Edit Opportunity
-                                  </DropdownMenuItem>
+          <TabsContent value={activeTab} className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Volunteer Opportunities</CardTitle>
+                <CardDescription>
+                  {activeTab === "all" &&
+                    "All volunteer opportunities in the system"}
+                  {activeTab === "active" &&
+                    "Currently active volunteer opportunities"}
+                  {activeTab === "pending" &&
+                    "Opportunities pending admin approval"}
+                  {activeTab === "inactive" &&
+                    "Inactive or past volunteer opportunities"}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Opportunity</TableHead>
+                      <TableHead>Organization</TableHead>
+                      <TableHead>Date & Location</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Spots</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredOpportunities.length > 0 ? (
+                      filteredOpportunities.map((opportunity) => (
+                        <TableRow key={opportunity.id}>
+                          <TableCell className="font-medium">
+                            <div>{opportunity.title}</div>
+                            <Badge variant="outline" className="mt-1">
+                              {opportunity.category}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{opportunity.organization}</TableCell>
+                          <TableCell>
+                            <div className="flex items-center">
+                              <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
+                              {new Date(opportunity.date).toLocaleDateString()}
+                            </div>
+                            <div className="flex items-center text-sm text-muted-foreground mt-1">
+                              <MapPin className="h-3.5 w-3.5 mr-1" />
+                              {opportunity.location}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusBadgeClass(
+                                opportunity.status
+                              )}`}
+                            >
+                              {opportunity.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div>{opportunity.spotsAvailable} available</div>
+                            <div className="text-sm text-muted-foreground">
+                              {opportunity.applicants} applicants
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem>
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View Details
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Edit className="h-4 w-4 mr-2" />
+                                  Edit Opportunity
+                                </DropdownMenuItem>
 
-                                  {opportunity.status === "Pending" && (
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        handleStatusChange(
-                                          opportunity.id,
-                                          "Active"
-                                        )
-                                      }
-                                    >
-                                      <CheckCircle className="h-4 w-4 mr-2" />
-                                      Approve
-                                    </DropdownMenuItem>
-                                  )}
-
-                                  {opportunity.status === "Active" && (
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        handleStatusChange(
-                                          opportunity.id,
-                                          "Inactive"
-                                        )
-                                      }
-                                    >
-                                      <XCircle className="h-4 w-4 mr-2" />
-                                      Mark as Inactive
-                                    </DropdownMenuItem>
-                                  )}
-
-                                  {opportunity.status === "Inactive" && (
-                                    <DropdownMenuItem
-                                      onClick={() =>
-                                        handleStatusChange(
-                                          opportunity.id,
-                                          "Active"
-                                        )
-                                      }
-                                    >
-                                      <CheckCircle className="h-4 w-4 mr-2" />
-                                      Reactivate
-                                    </DropdownMenuItem>
-                                  )}
-
-                                  <DropdownMenuSeparator />
+                                {opportunity.status === "Pending" && (
                                   <DropdownMenuItem
                                     onClick={() =>
-                                      handleDeleteOpportunity(opportunity.id)
+                                      handleStatusChange(
+                                        opportunity.id,
+                                        "Active"
+                                      )
                                     }
-                                    className="text-destructive"
                                   >
-                                    <Trash2 className="h-4 w-4 mr-2" />
-                                    Delete
+                                    <CheckCircle className="h-4 w-4 mr-2" />
+                                    Approve
                                   </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      ) : (
-                        <TableRow>
-                          <TableCell colSpan={6} className="text-center py-6">
-                            <p className="text-muted-foreground">
-                              No opportunities found
-                            </p>
+                                )}
+
+                                {opportunity.status === "Active" && (
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      handleStatusChange(
+                                        opportunity.id,
+                                        "Inactive"
+                                      )
+                                    }
+                                  >
+                                    <XCircle className="h-4 w-4 mr-2" />
+                                    Mark as Inactive
+                                  </DropdownMenuItem>
+                                )}
+
+                                {opportunity.status === "Inactive" && (
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      handleStatusChange(
+                                        opportunity.id,
+                                        "Active"
+                                      )
+                                    }
+                                  >
+                                    <CheckCircle className="h-4 w-4 mr-2" />
+                                    Reactivate
+                                  </DropdownMenuItem>
+                                )}
+
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleDeleteOpportunity(opportunity.id)
+                                  }
+                                  className="text-destructive"
+                                >
+                                  <Trash2 className="h-4 w-4 mr-2" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </TableCell>
                         </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </main>
-      <Footer />
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-6">
+                          <p className="text-muted-foreground">
+                            No opportunities found
+                          </p>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };
