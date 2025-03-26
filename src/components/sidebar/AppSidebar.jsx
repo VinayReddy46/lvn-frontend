@@ -321,7 +321,7 @@ export function AppSidebar({ ...props }) {
         <SidebarNav data={currentData} />
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t">
+      <SidebarFooter className="border-t">
        <TeamSwitcher teams={currentData.teams || []} />
         <div className="text-xs text-muted-foreground mt-4 group-data-[collapsible=icon]:hidden">
           <p>Version 1.0.0</p>
