@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   Home,
   Bell,
@@ -58,6 +59,14 @@ const NavItem = ({ to, icon: Icon, label, isActive, isPrimary }) => (
   </SidebarMenuItem>
 );
 
+NavItem.propTypes = {
+  to: PropTypes.string.isRequired,
+  icon: PropTypes.elementType.isRequired,
+  label: PropTypes.string.isRequired,
+  isActive: PropTypes.bool,
+  isPrimary: PropTypes.bool,
+};
+
 export function AppSidebarContent() {
   const { user, isAuthenticated, isOrgAdmin, isSystemAdmin, logout } =
     useAuth();
@@ -88,8 +97,8 @@ export function AppSidebarContent() {
   if (!isAuthenticated) return null;
 
   return (
-    <Sidebar collapsible="icon" >
-      <SidebarHeader  className="p-4">
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="p-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-orange-500 font-bold text-2xl">
             POINT
@@ -275,3 +284,7 @@ export function AppSidebarLayout({ children }) {
     </SidebarProvider>
   );
 }
+
+AppSidebarLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+};
