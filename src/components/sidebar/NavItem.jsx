@@ -21,7 +21,8 @@ export const NavItem = ({
   badge,
   onClick,
 }) => {
-  const { setOpenMobile } = useSidebar();
+  const { setOpenMobile, state } = useSidebar();
+  const isCollapsed = state.collapsible === "icon" && state.collapsed;
 
   const handleClick = (e) => {
     // Close sidebar on mobile when item is clicked
@@ -40,13 +41,21 @@ export const NavItem = ({
             "relative flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md",
             isActive && "bg-accent text-accent-foreground font-medium",
             isPrimary && "text-primary",
-            isPrimary && isActive && "bg-primary/10"
+            isPrimary && isActive && "bg-primary/10",
+            isCollapsed && "justify-center px-1"
           )}
           onClick={handleClick}
         >
-          {Icon && <Icon size={18} />}
-          <span className="truncate">{label}</span>
-          {badge && (
+          {Icon && (
+            <Icon
+              size={18}
+              className={cn("shrink-0", isCollapsed && "mx-auto")}
+            />
+          )}
+          <span className={cn("truncate", isCollapsed && "hidden")}>
+            {label}
+          </span>
+          {badge && !isCollapsed && (
             <Badge
               variant="secondary"
               className={cn(

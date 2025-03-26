@@ -1,18 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LogOut, Plus, User, Settings, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/AuthProvider";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarProvider,
-  SidebarTrigger,
   SidebarRail,
   useSidebar,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,11 +24,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuGroup,
+  DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
 import SidebarNav from "./SidebarNav";
-import TopNav from "./TopNav";
-import { sidebarData, adminSidebarData } from "./sidebar-data";
-import { generateBreadcrumbs, getPageTitle } from "./breadcrumbUtils";
+import { sidebarData } from "./sidebar-data";
+import { cn } from "@/lib/utils";
 
 /**
  * Helper function to get user initials from name
@@ -48,74 +48,84 @@ const getInitials = (name) => {
  * TeamSwitcher component for organization selection
  */
 const TeamSwitcher = ({ teams = [] }) => {
-  const { isMobile } = useSidebar();
+  const { isMobile, state } = useSidebar();
+  const isCollapsed = state.collapsible === "icon" && state.collapsed;
   const [activeTeam, setActiveTeam] = React.useState(
     teams[0] || { name: "Organization", plan: "Default" }
   );
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="w-full justify-between h-auto pl-2 pr-3 py-2 hover:bg-accent"
-        >
-          <div className="flex items-center gap-3">
-            <div className="bg-primary/10 rounded-full p-2 flex items-center justify-center">
-              {activeTeam.logo ? (
-                <activeTeam.logo size={18} className="text-primary" />
-              ) : (
-                <span className="text-primary font-semibold text-sm">
-                  {activeTeam.name?.[0] || "O"}
-                </span>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                {activeTeam.logo ? (
+                  <activeTeam.logo className="size-4" />
+                ) : (
+                  <span className="font-semibold text-sm">
+                    {activeTeam.name?.[0] || "O"}
+                  </span>
+                )}
+              </div>
+              {!isCollapsed && (
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">
+                    {activeTeam.name}
+                  </span>
+                  {activeTeam.plan && (
+                    <span className="truncate text-xs text-muted-foreground">
+                      {activeTeam.plan}
+                    </span>
+                  )}
+                </div>
               )}
-            </div>
-            <div className="text-left overflow-hidden">
-              <p className="font-medium text-sm truncate">{activeTeam.name}</p>
-              {activeTeam.plan && (
-                <p className="text-xs text-muted-foreground truncate">
-                  {activeTeam.plan}
-                </p>
-              )}
-            </div>
-          </div>
-          <ChevronsUpDown size={16} />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-[225px]"
-        align={isMobile ? "center" : "start"}
-        side={isMobile ? "bottom" : "right"}
-      >
-        <DropdownMenuLabel>Organizations</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {teams.map((team) => (
-          <DropdownMenuItem
-            key={team.name}
-            onClick={() => setActiveTeam(team)}
-            className="flex items-center gap-2 cursor-pointer"
+              {!isCollapsed && <ChevronsUpDown className="ml-auto size-4" />}
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            align="start"
+            side={isMobile ? "bottom" : "right"}
+            sideOffset={4}
           >
-            <div className="bg-accent rounded-full p-1 flex items-center justify-center">
-              {team.logo ? (
-                <team.logo size={16} />
-              ) : (
-                <span className="text-foreground font-semibold text-xs">
-                  {team.name[0]}
-                </span>
-              )}
-            </div>
-            <span>{team.name}</span>
-          </DropdownMenuItem>
-        ))}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-          <div className="bg-primary/10 rounded-full p-1">
-            <Plus size={16} className="text-primary" />
-          </div>
-          <span>Add Organization</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+            <DropdownMenuLabel className="text-xs text-muted-foreground">
+              Organizations
+            </DropdownMenuLabel>
+            {teams.map((team, index) => (
+              <DropdownMenuItem
+                key={team.name}
+                onClick={() => setActiveTeam(team)}
+                className="gap-2 p-2"
+              >
+                <div className="flex size-6 items-center justify-center rounded-sm border">
+                  {team.logo ? (
+                    <team.logo className="size-4 shrink-0" />
+                  ) : (
+                    <span className="text-xs font-medium">{team.name[0]}</span>
+                  )}
+                </div>
+                <span>{team.name}</span>
+                <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="gap-2 p-2">
+              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                <Plus className="size-4" />
+              </div>
+              <div className="font-medium text-muted-foreground">
+                Add Organization
+              </div>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
   );
 };
 
@@ -133,110 +143,117 @@ TeamSwitcher.propTypes = {
  * NavUser component for user menu in the sidebar
  */
 const NavUser = ({ user }) => {
-  const { isMobile } = useSidebar();
+  const { isMobile, state } = useSidebar();
+  const isCollapsed = state.collapsible === "icon" && state.collapsed;
   const navigate = useNavigate();
   const { logout, isOrgAdmin, isSystemAdmin } = useAuth();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="w-full justify-between h-auto pl-2 pr-3 py-2 hover:bg-accent"
-        >
-          <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10 border border-gray-200">
-              <AvatarImage
-                src={
-                  user?.avatar ||
-                  `https://ui-avatars.com/api/?name=${
-                    user?.name || "User"
-                  }&background=random`
-                }
-              />
-              <AvatarFallback>
-                {user?.name ? getInitials(user.name) : "U"}
-              </AvatarFallback>
-            </Avatar>
-            <div className="text-left overflow-hidden">
-              <p className="font-medium text-sm truncate">{user?.name}</p>
-              <p className="text-xs text-muted-foreground truncate max-w-[150px]">
-                {user?.email}
-              </p>
-            </div>
-          </div>
-          <ChevronsUpDown size={16} />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-[225px]"
-        align={isMobile ? "center" : "end"}
-        side={isMobile ? "bottom" : "right"}
-        sideOffset={4}
-      >
-        <DropdownMenuLabel className="p-0 font-normal">
-          <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-                src={
-                  user?.avatar ||
-                  `https://ui-avatars.com/api/?name=${
-                    user?.name || "User"
-                  }&background=random`
-                }
-              />
-              <AvatarFallback>
-                {user?.name ? getInitials(user.name) : "U"}
-              </AvatarFallback>
-            </Avatar>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">{user?.name}</span>
-              <span className="truncate text-xs">{user?.email}</span>
-            </div>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem
-            onClick={() => navigate("/profile")}
-            className="flex items-center gap-2"
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage
+                  src={
+                    user?.avatar ||
+                    `https://ui-avatars.com/api/?name=${
+                      user?.name || "User"
+                    }&background=random`
+                  }
+                />
+                <AvatarFallback className="rounded-lg">
+                  {user?.name ? getInitials(user.name) : "U"}
+                </AvatarFallback>
+              </Avatar>
+              {!isCollapsed && (
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">{user?.name}</span>
+                  <span className="truncate text-xs text-muted-foreground">
+                    {user?.email}
+                  </span>
+                </div>
+              )}
+              {!isCollapsed && <ChevronsUpDown className="ml-auto size-4" />}
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            align="end"
+            side={isMobile ? "bottom" : "right"}
+            sideOffset={4}
           >
-            <User size={16} />
-            <span>Manage Account</span>
-          </DropdownMenuItem>
+            <DropdownMenuLabel className="p-0 font-normal">
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage
+                    src={
+                      user?.avatar ||
+                      `https://ui-avatars.com/api/?name=${
+                        user?.name || "User"
+                      }&background=random`
+                    }
+                  />
+                  <AvatarFallback className="rounded-lg">
+                    {user?.name ? getInitials(user.name) : "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">{user?.name}</span>
+                  <span className="truncate text-xs text-muted-foreground">
+                    {user?.email}
+                  </span>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                onClick={() => navigate("/profile")}
+                className="flex items-center gap-2"
+              >
+                <User size={16} />
+                <span>Manage Account</span>
+              </DropdownMenuItem>
 
-          {isOrgAdmin && (
+              {isOrgAdmin && (
+                <DropdownMenuItem
+                  onClick={() => navigate("/admin")}
+                  className="flex items-center gap-2"
+                >
+                  <Settings size={16} />
+                  <span>Switch to Admin View</span>
+                </DropdownMenuItem>
+              )}
+
+              {isSystemAdmin && (
+                <DropdownMenuItem
+                  onClick={() => navigate("/admin/system")}
+                  className="flex items-center gap-2"
+                >
+                  <Settings size={16} />
+                  <span>Switch to System Admin</span>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator />
+
             <DropdownMenuItem
-              onClick={() => navigate("/admin")}
-              className="flex items-center gap-2"
+              onClick={logout}
+              className="flex items-center gap-2 text-destructive"
             >
-              <Settings size={16} />
-              <span>Switch to Admin View</span>
+              <LogOut size={16} />
+              <span>Logout</span>
             </DropdownMenuItem>
-          )}
-
-          {isSystemAdmin && (
-            <DropdownMenuItem
-              onClick={() => navigate("/admin/system")}
-              className="flex items-center gap-2"
-            >
-              <Settings size={16} />
-              <span>Switch to System Admin</span>
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuGroup>
-
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem
-          onClick={logout}
-          className="flex items-center gap-2 text-destructive"
-        >
-          <LogOut size={16} />
-          <span>Logout</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
   );
 };
 
@@ -252,10 +269,12 @@ NavUser.propTypes = {
  * AppSidebar component for the application sidebar
  */
 export function AppSidebar({ ...props }) {
-  const { user, isAuthenticated, isOrgAdmin } = useAuth();
+  const { user, isOrgAdmin } = useAuth();
+  const { state } = useSidebar();
+  const isCollapsed = state.collapsible === "icon" && state.collapsed;
 
-  // If not authenticated, don't render sidebar
-  if (!isAuthenticated) return null;
+  // If user is not logged in, don't render anything
+  if (!user) return null;
 
   // Determine which sidebar data to use based on admin status
   const currentData = props.data || sidebarData;
@@ -264,21 +283,34 @@ export function AppSidebar({ ...props }) {
     <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader className="p-4 border-b">
         <div className="flex items-center justify-between mb-4">
-          <Link to="/" className="text-primary font-bold text-2xl">
-            LVN
+          <Link
+            to="/"
+            className={`text-primary font-bold ${
+              isCollapsed ? "flex justify-center" : "text-2xl"
+            }`}
+          >
+            {isCollapsed ? (
+              <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary/10">
+                <span className="text-primary font-bold">L</span>
+              </div>
+            ) : (
+              "LVN"
+            )}
           </Link>
-          <SidebarTrigger />
         </div>
 
-        <NavUser user={user} />
+        <TeamSwitcher teams={currentData.teams || []} />
 
         {isOrgAdmin && (
           <Button
             variant="outline"
-            className="w-full mt-4 gap-2 text-primary border-primary hover:bg-accent"
+            className={cn(
+              "w-full mt-4 gap-2 text-primary border-primary hover:bg-accent",
+              isCollapsed && "p-0 h-8 w-8 flex justify-center items-center"
+            )}
           >
-            <Plus size={16} />
-            Add Hours
+            <Plus size={16} className="shrink-0" />
+            {!isCollapsed && <span>Add Hours</span>}
           </Button>
         )}
       </SidebarHeader>
@@ -288,11 +320,10 @@ export function AppSidebar({ ...props }) {
       </SidebarContent>
 
       <SidebarFooter className="p-4 border-t">
-        <div className="space-y-2">
-          <div className="text-xs text-muted-foreground">
-            <p>Version 1.0.0</p>
-            <p className="mt-1">© 2023 LVN. All rights reserved.</p>
-          </div>
+        <NavUser user={user} />
+        <div className="text-xs text-muted-foreground mt-4 group-data-[collapsible=icon]:hidden">
+          <p>Version 1.0.0</p>
+          <p className="mt-1">© 2023 LVN. All rights reserved.</p>
         </div>
       </SidebarFooter>
       <SidebarRail />
@@ -302,58 +333,4 @@ export function AppSidebar({ ...props }) {
 
 AppSidebar.propTypes = {
   data: PropTypes.object,
-};
-
-/**
- * Main component that provides a properly structured main content area
- */
-const Main = ({ children, fixed = true }) => {
-  return (
-    <main
-      className={cn(
-        "px-4 py-6",
-        fixed && "flex flex-col flex-grow overflow-hidden"
-      )}
-    >
-      {children}
-    </main>
-  );
-};
-
-Main.propTypes = {
-  children: PropTypes.node.isRequired,
-  fixed: PropTypes.bool,
-};
-
-/**
- * AppSidebarLayout component that wraps the main content with AppSidebar
- */
-export function AppSidebarLayout({ children }) {
-  const location = useLocation();
-  const { isAuthenticated, isSystemAdmin } = useAuth();
-
-  // Generate breadcrumbs from current path
-  const breadcrumbs = generateBreadcrumbs(location.pathname);
-  const pageTitle = getPageTitle(breadcrumbs);
-
-  // Determine which sidebar data to use based on admin status
-  const currentSidebarData = isSystemAdmin ? adminSidebarData : sidebarData;
-
-  return (
-    <SidebarProvider>
-      <div className="flex h-screen bg-background">
-        <AppSidebar data={currentSidebarData} />
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <TopNav title={pageTitle} breadcrumbs={breadcrumbs} />
-          <Main fixed>
-            <div className="h-full overflow-y-auto">{children}</div>
-          </Main>
-        </div>
-      </div>
-    </SidebarProvider>
-  );
-}
-
-AppSidebarLayout.propTypes = {
-  children: PropTypes.node.isRequired,
 };

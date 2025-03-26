@@ -138,12 +138,15 @@ const SidebarNav = ({ data }) => {
   const location = useLocation();
   const { state } = useSidebar();
   const { setOpenMobile } = useSidebar();
+  const isCollapsed = state.collapsible === "icon" && state.collapsed;
 
   return (
     <>
       {data.navGroups.map((group, index) => (
         <SidebarGroup key={`group-${index}`}>
-          {group.title && <SidebarGroupLabel>{group.title}</SidebarGroupLabel>}
+          {group.title && !isCollapsed && (
+            <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+          )}
           <SidebarMenu>
             {group.items.map((item, itemIndex) => {
               // Check if this item is active (including its subitems)
@@ -156,11 +159,17 @@ const SidebarNav = ({ data }) => {
               // If item has sub-items
               if (item.items && item.items.length > 0) {
                 // If sidebar is collapsed, show dropdown
-                if (state === "collapsed") {
+                if (isCollapsed) {
                   return (
-                    <CollapsedDropdownMenu
+                    <NavItem
                       key={`item-${itemIndex}`}
-                      item={item}
+                      to={item.url || item.items[0].url}
+                      icon={item.icon}
+                      label={item.title}
+                      isActive={isMainActive}
+                      isPrimary={item.isPrimary}
+                      badge={item.badge}
+                      onClick={() => setOpenMobile(false)}
                     />
                   );
                 }
