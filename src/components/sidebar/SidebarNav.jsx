@@ -1,4 +1,4 @@
-import React from "react";
+// React is used implicitly by JSX
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
@@ -136,9 +136,8 @@ const CollapsedDropdownMenu = ({ item }) => {
  */
 const SidebarNav = ({ data }) => {
   const location = useLocation();
-  const { state } = useSidebar();
-  const { setOpenMobile } = useSidebar();
-  const isCollapsed = state.collapsible === "icon" && state.collapsed;
+  const { open, setOpenMobile } = useSidebar();
+  const isCollapsed = !open;
 
   return (
     <>

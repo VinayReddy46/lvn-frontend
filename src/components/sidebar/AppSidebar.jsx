@@ -48,8 +48,8 @@ const getInitials = (name) => {
  * TeamSwitcher component for organization selection
  */
 const TeamSwitcher = ({ teams = [] }) => {
-  const { isMobile, state } = useSidebar();
-  const isCollapsed = state.collapsible === "icon" && state.collapsed;
+  const { isMobile, open } = useSidebar();
+  const isCollapsed = !open;
   const [activeTeam, setActiveTeam] = React.useState(
     teams[0] || { name: "Organization", plan: "Default" }
   );
@@ -143,8 +143,8 @@ TeamSwitcher.propTypes = {
  * NavUser component for user menu in the sidebar
  */
 const NavUser = ({ user }) => {
-  const { isMobile, state } = useSidebar();
-  const isCollapsed = state.collapsible === "icon" && state.collapsed;
+  const { isMobile, open } = useSidebar();
+  const isCollapsed = !open;
   const navigate = useNavigate();
   const { logout, isOrgAdmin, isSystemAdmin } = useAuth();
 
@@ -270,8 +270,9 @@ NavUser.propTypes = {
  */
 export function AppSidebar({ ...props }) {
   const { user, isOrgAdmin } = useAuth();
-  const { state } = useSidebar();
-  const isCollapsed = state.collapsible === "icon" && state.collapsed;
+  const { open } = useSidebar();
+  const isCollapsed = !open;
+  console.log("isCollapsed", isCollapsed);
 
   // If user is not logged in, don't render anything
   if (!user) return null;
@@ -281,7 +282,7 @@ export function AppSidebar({ ...props }) {
 
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
-      <SidebarHeader className="p-4 border-b">
+      <SidebarHeader className="border-b">
         <div className="flex items-center justify-between mb-4">
           <Link
             to="/"
@@ -315,7 +316,7 @@ export function AppSidebar({ ...props }) {
         )}
       </SidebarHeader>
 
-      <SidebarContent className="px-2">
+      <SidebarContent>
         <SidebarNav data={currentData} />
       </SidebarContent>
 

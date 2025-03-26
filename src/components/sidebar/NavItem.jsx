@@ -1,4 +1,4 @@
-import React from "react";
+// React is used implicitly by JSX
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -21,8 +21,8 @@ export const NavItem = ({
   badge,
   onClick,
 }) => {
-  const { setOpenMobile, state } = useSidebar();
-  const isCollapsed = state.collapsible === "icon" && state.collapsed;
+  const { setOpenMobile, open } = useSidebar();
+  const isCollapsed = !open;
 
   const handleClick = (e) => {
     // Close sidebar on mobile when item is clicked
