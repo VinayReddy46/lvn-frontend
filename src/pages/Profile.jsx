@@ -15,6 +15,9 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/providers/AuthProvider";
 import { toast } from "sonner";
 import { Loader2, Save, Plus, X } from "lucide-react";
+import Profileupdate from "./Profileupdate/Profileupdate";
+
+
 
 const Profile = () => {
   const { user } = useAuth();
@@ -25,6 +28,8 @@ const Profile = () => {
     phone: "555-123-4567",
     address: "123 Main St, Anytown, USA",
     bio: "Passionate about making a difference in my community through volunteering.",
+    skills: ["Teaching", "Gardening"],
+    interests: ["Environment", "Education"]
   });
 
   const [skills, setSkills] = useState([
@@ -43,6 +48,7 @@ const Profile = () => {
     "Animal Welfare",
   ]);
   const [newInterest, setNewInterest] = useState("");
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -252,6 +258,10 @@ const Profile = () => {
                     </div>
                   </CardContent>
                 </Card>
+              </div>
+
+              <div className="space-y-8">
+                <Profileupdate />
               </div>
             </div>
 

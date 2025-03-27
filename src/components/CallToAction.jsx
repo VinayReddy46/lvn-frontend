@@ -33,7 +33,7 @@ const CallToAction = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="border-white text-white hover:bg-white/20"
+                  className="border-white text-blue-700 hover:bg-white/20"
                 >
                   Browse Opportunities
                 </Button>
