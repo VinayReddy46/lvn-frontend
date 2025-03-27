@@ -1,7 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
@@ -42,8 +41,6 @@ import ManageUsers from "./pages/admin/ManageUsers";
 // Import the ComingSoon component
 import ComingSoon from "./pages/ComingSoon";
 
-const queryClient = new QueryClient();
-
 // Wrap each page component with the PageLayout
 const withPageLayout = (Component) => {
   const WrappedComponent = (props) => (
@@ -70,139 +67,122 @@ const WrappedManageUsers = withPageLayout(ManageUsers);
 const WrappedComingSoon = withPageLayout(ComingSoon);
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <ThemeProvider defaultTheme="light">
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <AuthProvider>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Index />} />
-              <Route path="/opportunities" element={<Opportunities />} />
-              <Route path="/organizations" element={<Organizations />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route
-                path="/user-role-selection"
-                element={<UserRoleSelection />}
-              />
+  <BrowserRouter>
+    <ThemeProvider defaultTheme="light">
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <AuthProvider>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/opportunities" element={<Opportunities />} />
+            <Route path="/organizations" element={<Organizations />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/user-role-selection"
+              element={<UserRoleSelection />}
+            />
 
-              {/* All Protected Routes with Sidebar */}
-              <Route element={<RouteComponent />}>
-                {/* User Protected Routes */}
-                <Route element={<UserProtectedRoute />}>
-                  <Route path="/dashboard" element={<WrappedDashboard />} />
-                  <Route path="/profile" element={<WrappedProfile />} />
-                  <Route
-                    path="/my-opportunities"
-                    element={<WrappedMyOpportunities />}
-                  />
-                  <Route
-                    path="/create-organization"
-                    element={<WrappedCreateOrganization />}
-                  />
+            {/* All Protected Routes with Sidebar */}
+            <Route element={<RouteComponent />}>
+              {/* User Protected Routes */}
+              <Route element={<UserProtectedRoute />}>
+                <Route path="/dashboard" element={<WrappedDashboard />} />
+                <Route path="/profile" element={<WrappedProfile />} />
+                <Route
+                  path="/my-opportunities"
+                  element={<WrappedMyOpportunities />}
+                />
+                <Route
+                  path="/create-organization"
+                  element={<WrappedCreateOrganization />}
+                />
 
-                  {/* Simple placeholder routes */}
-                  <Route path="/activity" element={<WrappedComingSoon />} />
-                  <Route
-                    path="/notifications"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route path="/nonprofits" element={<WrappedComingSoon />} />
-                  <Route path="/causes" element={<WrappedComingSoon />} />
-                  <Route path="/calendar" element={<WrappedComingSoon />} />
-                  <Route path="/messages" element={<WrappedComingSoon />} />
-                  <Route path="/people" element={<WrappedComingSoon />} />
-                  <Route path="/reports" element={<WrappedComingSoon />} />
-                  <Route path="/settings" element={<WrappedComingSoon />} />
-                </Route>
-
-                {/* Organization Admin Routes */}
-                <Route element={<OrgAdminProtectedRoute />}>
-                  <Route path="/admin" element={<WrappedOrgAdminDashboard />} />
-                  <Route
-                    path="/admin/org/opportunities"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/org/volunteers"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/org/organization"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/notifications"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/calendar"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/messages"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/reports"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/settings"
-                    element={<WrappedComingSoon />}
-                  />
-                </Route>
-
-                {/* System Admin Routes */}
-                <Route element={<SystemAdminProtectedRoute />}>
-                  <Route
-                    path="/admin/system"
-                    element={<WrappedSystemAdminDashboard />}
-                  />
-                  <Route
-                    path="/admin/system/opportunities"
-                    element={<WrappedManageOpportunities />}
-                  />
-                  <Route
-                    path="/admin/system/organizations"
-                    element={<WrappedManageOrganizations />}
-                  />
-                  <Route
-                    path="/admin/system/users"
-                    element={<WrappedManageUsers />}
-                  />
-                  <Route
-                    path="/admin/system/settings"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/system/access"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/system/reports"
-                    element={<WrappedComingSoon />}
-                  />
-                  <Route
-                    path="/admin/system/notifications"
-                    element={<WrappedComingSoon />}
-                  />
-                </Route>
+                {/* Simple placeholder routes */}
+                <Route path="/activity" element={<WrappedComingSoon />} />
+                <Route path="/notifications" element={<WrappedComingSoon />} />
+                <Route path="/nonprofits" element={<WrappedComingSoon />} />
+                <Route path="/causes" element={<WrappedComingSoon />} />
+                <Route path="/calendar" element={<WrappedComingSoon />} />
+                <Route path="/messages" element={<WrappedComingSoon />} />
+                <Route path="/people" element={<WrappedComingSoon />} />
+                <Route path="/reports" element={<WrappedComingSoon />} />
+                <Route path="/settings" element={<WrappedComingSoon />} />
               </Route>
 
-              {/* Catch All */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AuthProvider>
-        </TooltipProvider>
-      </ThemeProvider>
-    </BrowserRouter>
-  </QueryClientProvider>
+              {/* Organization Admin Routes */}
+              <Route element={<OrgAdminProtectedRoute />}>
+                <Route path="/admin" element={<WrappedOrgAdminDashboard />} />
+                <Route
+                  path="/admin/org/opportunities"
+                  element={<WrappedComingSoon />}
+                />
+                <Route
+                  path="/admin/org/volunteers"
+                  element={<WrappedComingSoon />}
+                />
+                <Route
+                  path="/admin/org/organization"
+                  element={<WrappedComingSoon />}
+                />
+                <Route
+                  path="/admin/notifications"
+                  element={<WrappedComingSoon />}
+                />
+                <Route path="/admin/calendar" element={<WrappedComingSoon />} />
+                <Route path="/admin/messages" element={<WrappedComingSoon />} />
+                <Route path="/admin/reports" element={<WrappedComingSoon />} />
+                <Route path="/admin/settings" element={<WrappedComingSoon />} />
+              </Route>
+
+              {/* System Admin Routes */}
+              <Route element={<SystemAdminProtectedRoute />}>
+                <Route
+                  path="/admin/system"
+                  element={<WrappedSystemAdminDashboard />}
+                />
+                <Route
+                  path="/admin/system/opportunities"
+                  element={<WrappedManageOpportunities />}
+                />
+                <Route
+                  path="/admin/system/organizations"
+                  element={<WrappedManageOrganizations />}
+                />
+                <Route
+                  path="/admin/system/users"
+                  element={<WrappedManageUsers />}
+                />
+                <Route
+                  path="/admin/system/settings"
+                  element={<WrappedComingSoon />}
+                />
+                <Route
+                  path="/admin/system/access"
+                  element={<WrappedComingSoon />}
+                />
+                <Route
+                  path="/admin/system/reports"
+                  element={<WrappedComingSoon />}
+                />
+                <Route
+                  path="/admin/system/notifications"
+                  element={<WrappedComingSoon />}
+                />
+              </Route>
+            </Route>
+
+            {/* Catch All */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
+      </TooltipProvider>
+    </ThemeProvider>
+  </BrowserRouter>
 );
 
 export default App;
